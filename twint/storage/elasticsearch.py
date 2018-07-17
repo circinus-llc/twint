@@ -4,6 +4,8 @@ from time import strftime, localtime
 import contextlib
 import sys
 
+fix = False
+
 class RecycleObject(object):
     def write(self, junk): pass
     def flush(self): pass
@@ -73,83 +75,86 @@ def Tweet(Tweet, config):
             }
     actions.append(j_data)
 
-    for l in range(int(Tweet.likes)):
-        j_data = {
-                "_index": config.Index_tweets,
-                "_type": "items",
-                "_id": Tweet.id + "_likes_" + str(nLikes) + "_" + config.Essid,
-                "_source": {
-                    "id": Tweet.id,
-                    "date": dt,
-                    "timezone": Tweet.timezone,
-                    "location": Tweet.location,
-                    "tweet": Tweet.tweet,
-                    "hashtags": Tweet.hashtags,
-                    "likes": True,
-                    "user_id": Tweet.user_id,
-                    "username": Tweet.username,
-                    "day": day,
-                    "hour": hour(Tweet.datetime),
-                    "link": Tweet.link,
-                    "retweet": Tweet.retweet,
-                    "user_rt": Tweet.user_rt,
-                    "essid": config.Essid
+    if (fix):
+        for l in range(int(Tweet.likes)):
+            j_data = {
+                    "_index": config.Index_tweets,
+                    "_type": "items",
+                    "_id": Tweet.id + "_likes_" + str(nLikes) + "_" + config.Essid,
+                    "_source": {
+                        "id": Tweet.id,
+                        "date": dt,
+                        "timezone": Tweet.timezone,
+                        "location": Tweet.location,
+                        "tweet": Tweet.tweet,
+                        "hashtags": Tweet.hashtags,
+                        "likes": True,
+                        "user_id": Tweet.user_id,
+                        "username": Tweet.username,
+                        "day": day,
+                        "hour": hour(Tweet.datetime),
+                        "link": Tweet.link,
+                        "retweet": Tweet.retweet,
+                        "user_rt": Tweet.user_rt,
+                        "essid": config.Essid
+                        }
                     }
-                }
-        actions.append(j_data)
-        nLikes += 1
+            actions.append(j_data)
+            nLikes += 1
 
-    for rep in range(int(Tweet.replies)):
-        j_data = {
-                "_index": config.Index_tweets,
-                "_type": "items",
-                "_id": Tweet.id + "_replies_" + str(nReplies) + "_" + config.Essid,
-                "_source": {
-                    "id": Tweet.id,
-                    "date": dt,
-                    "timezone": Tweet.timezone,
-                    "location": Tweet.location,
-                    "tweet": Tweet.tweet,
-                    "hashtags": Tweet.hashtags,
-                    "replies": True,
-                    "user_id": Tweet.user_id,
-                    "username": Tweet.username,
-                    "day": day,
-                    "hour": hour(Tweet.datetime),
-                    "link": Tweet.link,
-                    "retweet": Tweet.retweet,
-                    "user_rt": Tweet.user_rt,
-                    "essid": config.Essid
+    if (fix):
+        for rep in range(int(Tweet.replies)):
+            j_data = {
+                    "_index": config.Index_tweets,
+                    "_type": "items",
+                    "_id": Tweet.id + "_replies_" + str(nReplies) + "_" + config.Essid,
+                    "_source": {
+                        "id": Tweet.id,
+                        "date": dt,
+                        "timezone": Tweet.timezone,
+                        "location": Tweet.location,
+                        "tweet": Tweet.tweet,
+                        "hashtags": Tweet.hashtags,
+                        "replies": True,
+                        "user_id": Tweet.user_id,
+                        "username": Tweet.username,
+                        "day": day,
+                        "hour": hour(Tweet.datetime),
+                        "link": Tweet.link,
+                        "retweet": Tweet.retweet,
+                        "user_rt": Tweet.user_rt,
+                        "essid": config.Essid
+                        }
                     }
-                }
-        actions.append(j_data)
-        nReplies += 1
+            actions.append(j_data)
+            nReplies += 1
 
-    for ret in range(int(Tweet.retweets)):
-        j_data = {
-                "_index": config.Index_tweets,
-                "_type": "items",
-                "_id": Tweet.id + "_retweets_" + str(nRetweets) + "_" + config.Essid,
-                "_source": {
-                    "id": Tweet.id,
-                    "date": dt,
-                    "timezone": Tweet.timezone,
-                    "location": Tweet.location,
-                    "tweet": Tweet.tweet,
-                    "hashtags": Tweet.hashtags,
-                    "retweets": True,
-                    "user_id": Tweet.user_id,
-                    "username": Tweet.username,
-                    "day": day,
-                    "hour": hour(Tweet.datetime),
-                    "link": Tweet.link,
-                    "retweet": Tweet.retweet,
-                    "user_rt": Tweet.user_rt,
-                    "essid": config.Essid
+    if (fix):
+        for ret in range(int(Tweet.retweets)):
+            j_data = {
+                    "_index": config.Index_tweets,
+                    "_type": "items",
+                    "_id": Tweet.id + "_retweets_" + str(nRetweets) + "_" + config.Essid,
+                    "_source": {
+                        "id": Tweet.id,
+                        "date": dt,
+                        "timezone": Tweet.timezone,
+                        "location": Tweet.location,
+                        "tweet": Tweet.tweet,
+                        "hashtags": Tweet.hashtags,
+                        "retweets": True,
+                        "user_id": Tweet.user_id,
+                        "username": Tweet.username,
+                        "day": day,
+                        "hour": hour(Tweet.datetime),
+                        "link": Tweet.link,
+                        "retweet": Tweet.retweet,
+                        "user_rt": Tweet.user_rt,
+                        "essid": config.Essid
+                        }
                     }
-                }
-        actions.append(j_data)
-        nRetweets += 1
+            actions.append(j_data)
+            nRetweets += 1
 
     es = Elasticsearch(config.Elasticsearch)
     with nostdout():
